@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COMXL — Classical Optimisation, Step by Step</title>
+<title>COMXL — A Step by Step Classical Optimisation Tool</title>
 <meta name="description" content="Classical optimisation methods — golden section, Nelder-Mead, Powell, simplex, KKT — running in your browser with every iteration shown. Ported from the COMxL Excel/VBA workbook.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∇</text></svg>">
@@ -16,12 +16,12 @@
       <span class="glyph">∇</span>
       <div>
         <h1>COMXL</h1>
-        <p class="tagline">Classical optimisation with the working shown</p>
+        <p class="tagline">Classical optimization made interactive, fast, and completely transparent</p>
       </div>
     </div>
     <nav class="masthead-links">
-      <a href="https://github.com/Maspolic-Amo-Yeboah/COMXL" target="_blank" rel="noopener">Repository</a>
-      <a href="https://github.com/Maspolic-Amo-Yeboah/COMXL/blob/main/notebooks/COMxL_Py_demonstration.ipynb" target="_blank" rel="noopener">Notebook</a>
+      <a href="https://github.com/maspolic/COMXL" target="_blank" rel="noopener">Repository</a>
+      <a href="https://github.com/maspolic/COMXL/blob/main/notebooks/COMxL_Py_demonstration.ipynb" target="_blank" rel="noopener">Notebook</a>
     </nav>
   </div>
 </header>
@@ -29,14 +29,15 @@
 <section class="intro">
   <div class="wrap">
     <p>
-      A pure-Python port of the COMxL Excel/VBA optimisation workbook. The original
-      drove worksheet formulas from VBA user forms and wrote each iteration back onto
-      the sheet. This page runs the same algorithms in your browser and shows the same
-      iteration tables — no install, no server, nothing uploaded.
+      An interactive optimization solver, inspired by and built to support Dr. Jude Bonsu’s Computer Optimization Methods course.
+      COMXL brings classical optimization algorithms directly to your web browser. 
+      Originally developed as an Excel/VBA workbook that printed iteration results
+      line-by-line, this modern Python web app runs the exact same algorithms 
+      locally. Experience clear, step-by-step solution traces and complete 
+      iteration tables—with zero setup, instant results, and total data privacy
     </p>
     <p class="fineprint">
-      Everything executes locally in your browser via Pyodide, using the same
-      <code>comxl</code> package the repository ships and tests.
+      Everything executes locally in your browser via Pyodide
     </p>
   </div>
 </section>
@@ -327,7 +328,7 @@
 <footer class="footer">
   <div class="wrap">
     <p>
-      <strong>COMXL</strong> — ported from the COMxL Excel/VBA workbook by
+      <strong>COMXL</strong> — was developed from the original COMxL Excel Add-In file created by by
       Maspolic Amo Yeboah. MIT licensed.
     </p>
     <p class="fineprint">
