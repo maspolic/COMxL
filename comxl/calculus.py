@@ -1,12 +1,6 @@
 """
 Numerical differentiation.
 
-Ports of:
-  * `gradient`  (UserForm17.frm, UserForm2.frm) and `gradienttt` (Helper_Sub_2.bas)
-  * `HESS`      (UserForm17.frm, UserForm2.frm) and `hessiannnn` (Helper_Sub_2.bas)
-  * `JACOBI1`   (Helper_Sub.bas)
-  * `diff1` / `diff2` (UserForm7.frm)
-
 All use the same central-difference formulas and step sizes as the VBA
 (delx = 1e-4 for gradients and Hessians, h = 1e-4 for the 1D derivatives),
 so results reproduce the spreadsheet numbers rather than merely approximating
@@ -30,12 +24,8 @@ __all__ = [
     "hessian_matrix",
 ]
 
-DELX = 1.0e-4       # matches `delx` throughout the VBA source
+DELX = 1.0e-4      
 
-
-# ----------------------------------------------------------------------------
-# One-dimensional derivatives  (diff1 / diff2 in UserForm7.frm)
-# ----------------------------------------------------------------------------
 def first_derivative(f, x, h: float = DELX) -> float:
     """Central-difference first derivative: (f(x+h) - f(x-h)) / 2h."""
     g = make_function(f)
@@ -48,19 +38,11 @@ def second_derivative(f, x, h: float = DELX) -> float:
     return (g(x - h) - 2.0 * g(x) + g(x + h)) / (h * h)
 
 
-# ----------------------------------------------------------------------------
-# Gradient vector
-# ----------------------------------------------------------------------------
+
 def gradient_vector(f, x, delx: float = DELX, n: int | None = None):
     """
-    Gradient as a plain ndarray, with no Result or iteration table built.
-
-    Same central differences as `gradient`, but for use *inside* solvers, which
-    call it thousands of times and discard everything except the numbers.
-    Building a DataFrame per call dominated the cost of `kkt` -- about 70% of
-    its runtime, and far worse in a browser runtime where pandas is slower.
-
-    Prefer `gradient` when a person is going to read the result.
+    Gradient as a plain ndarray, with no Result or iteration table built
+    
     """
     x = np.atleast_1d(np.asarray(x, dtype=float))
     k = len(x)
@@ -72,6 +54,7 @@ def gradient_vector(f, x, delx: float = DELX, n: int | None = None):
         step[i] = delx
         grad[i] = (g(x + step) - g(x - step)) / (2.0 * delx)
     return grad
+
 
 
 def hessian_matrix(f, x, delx: float = DELX, n: int | None = None):
@@ -106,9 +89,8 @@ def gradient(f, x, delx: float = DELX, show_steps: bool = True, n: int | None = 
     """
     Gradient of a scalar function of several variables.
 
-    Each component uses a central difference in that coordinate alone, exactly
-    as the VBA `gradient()` function did.
-
+    Each component uses a central difference in that coordinate alone
+    
     Parameters
     ----------
     f : callable or str
@@ -153,16 +135,13 @@ def gradient(f, x, delx: float = DELX, show_steps: bool = True, n: int | None = 
     return res
 
 
-# ----------------------------------------------------------------------------
-# Hessian matrix
-# ----------------------------------------------------------------------------
+
 def hessian(f, x, delx: float = DELX, show_steps: bool = True, n: int | None = None):
     """
     Hessian (matrix of second partial derivatives).
 
     Diagonal terms use  (f(x+h) - 2f(x) + f(x-h)) / h^2 and off-diagonal terms
-    the four-point formula  (f++ - f+- - f-+ + f--) / 4h^2, matching `HESS()`
-    in UserForm17.frm.
+    the four-point formula  (f++ - f+- - f-+ + f--) / 4h^2
 
     Returns
     -------
@@ -215,9 +194,7 @@ def hessian(f, x, delx: float = DELX, show_steps: bool = True, n: int | None = N
     return res
 
 
-# ----------------------------------------------------------------------------
-# Jacobian matrix  (JACOBI1 in Helper_Sub.bas)
-# ----------------------------------------------------------------------------
+
 def jacobian(funcs, x, show_steps: bool = True):
     """
     Jacobian of a system of equations f_i(x_1..x_n).
