@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comxl"
+version = "0.1.0"
+description = "Classical optimisation methods with step-by-step working, ported from the COMxL Excel/VBA workbook"
+authors = [{name = "Maspolic Amo Yeboah"}]
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+keywords = ["optimization", "golden section", "simplex", "nelder-mead", "powell", "KKT", "teaching"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = [
+    "numpy>=1.21",
+    "pandas>=1.3",
+    "matplotlib>=3.4",
+]
+
+# seaborn only supplies styling and the categorical palette; plotting falls
+# back to matplotlib without it, which keeps the wheel installable in a
+# browser runtime (Pyodide).
+[project.optional-dependencies]
+plots = ["seaborn>=0.11"]
+dev = ["pytest>=7.0", "seaborn>=0.11", "build>=1.0"]
+
+[tool.setuptools.packages.find]
+include = ["comxl*"]

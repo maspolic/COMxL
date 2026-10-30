@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMXL — Classical Optimisation, Step by Step</title>
+<meta name="description" content="Classical optimisation methods — golden section, Nelder-Mead, Powell, simplex, KKT — running in your browser with every iteration shown. Ported from the COMxL Excel/VBA workbook.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∇</text></svg>">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand">
+      <span class="glyph">∇</span>
+      <div>
+        <h1>COMXL</h1>
+        <p class="tagline">Classical optimisation with the working shown</p>
+      </div>
+    </div>
+    <nav class="masthead-links">
+      <a href="https://github.com/Maspolic-Amo-Yeboah/COMXL" target="_blank" rel="noopener">Repository</a>
+      <a href="https://github.com/Maspolic-Amo-Yeboah/COMXL/blob/main/notebooks/COMxL_Py_demonstration.ipynb" target="_blank" rel="noopener">Notebook</a>
+    </nav>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <p>
+      A pure-Python port of the COMxL Excel/VBA optimisation workbook. The original
+      drove worksheet formulas from VBA user forms and wrote each iteration back onto
+      the sheet. This page runs the same algorithms in your browser and shows the same
+      iteration tables — no install, no server, nothing uploaded.
+    </p>
+    <p class="fineprint">
+      Everything executes locally in your browser via Pyodide, using the same
+      <code>comxl</code> package the repository ships and tests.
+    </p>
+  </div>
+</section>
+
+<div id="boot" class="wrap boot">
+  <div class="boot-card">
+    <div class="spinner" aria-hidden="true"></div>
+    <div>
+      <strong id="boot-title">Starting the Python runtime…</strong>
+      <p id="boot-detail">First load pulls down Python, NumPy, pandas and Matplotlib (around 15&nbsp;MB). It is cached afterwards.</p>
+    </div>
+  </div>
+</div>
+
+<main class="wrap app" id="app" hidden>
+
+  <div class="tabs" role="tablist">
+    <button class="tab is-active" role="tab" data-panel="p-1d">1-D search</button>
+    <button class="tab" role="tab" data-panel="p-multi">Multivariable</button>
+    <button class="tab" role="tab" data-panel="p-lp">Linear programming</button>
+    <button class="tab" role="tab" data-panel="p-kkt">Constrained (KKT)</button>
+    <button class="tab" role="tab" data-panel="p-matrix">Matrices</button>
+    <button class="tab" role="tab" data-panel="p-calc">Derivatives</button>
+  </div>
+
+  <!-- ─────────────────────────── 1-D ─────────────────────────── -->
+  <section class="panel is-active" id="p-1d" role="tabpanel">
+    <div class="panel-grid">
+      <form class="controls" id="form-1d">
+        <h2>One-dimensional search</h2>
+        <p class="hint">Minimise <em>f(x)</em> over an interval. Write the variable as <code>x</code>; <code>^</code> means power.</p>
+
+        <label>Method
+          <select name="method">
+            <option value="goldensection">Golden section</option>
+            <option value="intervalhalving">Interval halving</option>
+            <option value="dichotomous">Dichotomous</option>
+            <option value="fibonacci">Fibonacci</option>
+            <option value="exhaustive">Exhaustive</option>
+            <option value="divide_conquer">Divide and conquer</option>
+            <option value="secant">Secant</option>
+            <option value="newtonraphson">Newton–Raphson</option>
+          </select>
+        </label>
+
+        <label>Objective f(x)
+          <input name="expression" value="x^4 - 3*x^3 + 2" spellcheck="false">
+        </label>
+
+        <div class="row" data-when="bracket">
+          <label>Lower bound a<input name="a" value="0"></label>
+          <label>Upper bound b<input name="b" value="4"></label>
+        </div>
+
+        <div class="row" data-when="point" hidden>
+          <label>Starting point x₀<input name="x0" value="3"></label>
+        </div>
+
+        <div class="row" data-when="tol">
+          <label>Tolerance<input name="tol" value="0.000001"></label>
+          <label>Max iterations<input name="max_iter" value="200"></label>
+        </div>
+
+        <div class="row" data-when="n" hidden>
+          <label>Steps / intervals n<input name="n" value="25"></label>
+        </div>
+
+        <div class="row" data-when="delta" hidden>
+          <label>Separation δ<input name="delta" value="0.0001"></label>
+        </div>
+
+        <button type="submit" class="go">Solve</button>
+        <div class="examples">
+          <span>Try:</span>
+          <button type="button" data-ex='{"expression":"x^2 - 4*x + 3","a":"0","b":"5"}'>x² − 4x + 3</button>
+          <button type="button" data-ex='{"expression":"exp(x) - 3*x","a":"0","b":"3"}'>eˣ − 3x</button>
+          <button type="button" data-ex='{"expression":"x*sin(x) + 2","a":"0","b":"10"}'>x·sin x + 2</button>
+        </div>
+      </form>
+      <div class="output" id="out-1d"><p class="placeholder">Results appear here.</p></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── multivariable ───────────────────────── -->
+  <section class="panel" id="p-multi" role="tabpanel">
+    <div class="panel-grid">
+      <form class="controls" id="form-multi">
+        <h2>Multivariable unconstrained</h2>
+        <p class="hint">Derivative-free minimisation. Variables are <code>x1</code>, <code>x2</code>, … (or <code>x[0]</code>, <code>x[1]</code>). The number of variables comes from the starting point.</p>
+
+        <label>Method
+          <select name="method">
+            <option value="neldermead">Nelder–Mead simplex</option>
+            <option value="powell">Powell's conjugate directions</option>
+          </select>
+        </label>
+
+        <label>Objective f(x)
+          <input name="expression" value="(1-x1)^2 + 100*(x2-x1^2)^2" spellcheck="false">
+        </label>
+
+        <label>Starting point x₀
+          <input name="x0" value="-1.2 1.0" spellcheck="false">
+        </label>
+
+        <div class="row">
+          <label>Lower bounds <span class="opt">(optional)</span><input name="lower" placeholder="0 0" spellcheck="false"></label>
+          <label>Upper bounds <span class="opt">(optional)</span><input name="upper" placeholder="0.5 0.5" spellcheck="false"></label>
+        </div>
+
+        <div class="row">
+          <label>Max iterations<input name="max_iter" value="2000"></label>
+          <label>Tolerance <span class="opt">(Powell)</span><input name="tol" value="0.000001"></label>
+        </div>
+
+        <label class="check"><input type="checkbox" name="maximize"> Maximise instead of minimise</label>
+
+        <button type="submit" class="go">Solve</button>
+        <div class="examples">
+          <span>Try:</span>
+          <button type="button" data-ex='{"expression":"(1-x1)^2 + 100*(x2-x1^2)^2","x0":"-1.2 1.0"}'>Rosenbrock</button>
+          <button type="button" data-ex='{"expression":"(x1-3)^2 + (x2+1)^2","x0":"0 0"}'>Shifted bowl</button>
+          <button type="button" data-ex='{"expression":"(x1+2*x2-7)^2 + (2*x1+x2-5)^2","x0":"0 0"}'>Booth</button>
+        </div>
+      </form>
+      <div class="output" id="out-multi"><p class="placeholder">Results appear here.</p></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── linear programming ───────────────────────── -->
+  <section class="panel" id="p-lp" role="tabpanel">
+    <div class="panel-grid">
+      <form class="controls" id="form-lp">
+        <h2>Linear programming</h2>
+        <p class="hint">
+          One row per constraint, then a final row for the objective. The last column
+          is the right-hand side. Constraints are treated as ≤ for a maximisation.
+        </p>
+
+        <label>Problem matrix
+          <textarea name="matrix" rows="5" spellcheck="false">2 1 10
+1 3 15
+4 3 0</textarea>
+        </label>
+
+        <div class="row">
+          <label>Direction
+            <select name="mode">
+              <option value="max">Maximise</option>
+              <option value="min">Minimise (via the dual)</option>
+            </select>
+          </label>
+          <label>Region shading
+            <select name="hatch">
+              <option value="++">Grid</option>
+              <option value="xx">Mesh</option>
+              <option value="//">Diagonal</option>
+              <option value="">Plain</option>
+            </select>
+          </label>
+        </div>
+
+        <button type="submit" class="go">Solve</button>
+        <div class="examples">
+          <span>Try:</span>
+          <button type="button" data-ex='{"matrix":"1 0 4\n0 2 12\n3 2 18\n3 5 0","mode":"max"}'>Classic 3-constraint</button>
+          <button type="button" data-ex='{"matrix":"1 2 4\n3 1 6\n6 3 0","mode":"min"}'>Minimisation</button>
+        </div>
+        <p class="hint">
+          With two decision variables the feasible region is drawn, its corner points
+          listed with coordinates, and the optimum marked.
+        </p>
+      </form>
+      <div class="output" id="out-lp"><p class="placeholder">Results appear here.</p></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── KKT ───────────────────────── -->
+  <section class="panel" id="p-kkt" role="tabpanel">
+    <div class="panel-grid">
+      <form class="controls" id="form-kkt">
+        <h2>Constrained — Karush–Kuhn–Tucker</h2>
+        <p class="hint">
+          Write every inequality in the form <strong>g(x) ≤ 0</strong> and every equality as
+          <strong>h(x) = 0</strong>, one per line. For <code>x1 ≥ 0</code> enter <code>-x1</code>.
+        </p>
+
+        <label>Objective f(x)
+          <input name="expression" value="(x1-2)^2 + (x2-1)^2" spellcheck="false">
+        </label>
+
+        <div class="row">
+          <label>Number of variables<input name="n_vars" value="2"></label>
+          <label>Starting guess<input name="x0" value="0.5 0.5" spellcheck="false"></label>
+        </div>
+
+        <label>Inequalities g(x) ≤ 0
+          <textarea name="inequality" rows="3" spellcheck="false">x1 + x2 - 2
+-x1
+-x2</textarea>
+        </label>
+
+        <label>Equalities h(x) = 0 <span class="opt">(optional)</span>
+          <textarea name="equality" rows="2" spellcheck="false"></textarea>
+        </label>
+
+        <label class="check"><input type="checkbox" name="maximize"> Maximise instead of minimise</label>
+
+        <button type="submit" class="go">Solve</button>
+        <div class="examples">
+          <span>Try:</span>
+          <button type="button" data-ex='{"expression":"x1*x2","n_vars":"2","x0":"1 2","inequality":"","equality":"x1 + x2 - 10","maximize":true}'>Max xy, x+y=10</button>
+        </div>
+        <p class="hint">
+          Every one of the 2<sup>m</sup> active sets is solved and tested, so the case
+          table shows why each candidate was kept or rejected. Keep to a handful of
+          inequalities.
+        </p>
+      </form>
+      <div class="output" id="out-kkt"><p class="placeholder">Results appear here.</p></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── matrices ───────────────────────── -->
+  <section class="panel" id="p-matrix" role="tabpanel">
+    <div class="panel-grid">
+      <form class="controls" id="form-matrix">
+        <h2>Matrix operations</h2>
+        <p class="hint">One row per line. Gauss elimination uses maximum column pivoting with one error-correction pass.</p>
+
+        <label>Operation
+          <select name="operation">
+            <option value="inverse">Inverse</option>
+            <option value="determinant">Determinant</option>
+            <option value="eigenvalues">Eigenvalues</option>
+            <option value="transpose">Transpose</option>
+            <option value="row_echelon">Row echelon form</option>
+            <option value="solve">Solve A x = b</option>
+          </select>
+        </label>
+
+        <label>Matrix A
+          <textarea name="matrix" rows="4" spellcheck="false">4 -2 1
+-2 4 -2
+1 -2 4</textarea>
+        </label>
+
+        <label data-when="rhs" hidden>Right-hand side b
+          <input name="rhs" value="11 -16 17" spellcheck="false">
+        </label>
+
+        <button type="submit" class="go">Compute</button>
+      </form>
+      <div class="output" id="out-matrix"><p class="placeholder">Results appear here.</p></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── derivatives ───────────────────────── -->
+  <section class="panel" id="p-calc" role="tabpanel">
+    <div class="panel-grid">
+      <form class="controls" id="form-calc">
+        <h2>Gradient and Hessian</h2>
+        <p class="hint">Central differences with the same step the workbook used (Δx = 10⁻⁴).</p>
+
+        <label>Function f(x)
+          <input name="expression" value="x1^2 + 3*x1*x2 + 2*x2^2" spellcheck="false">
+        </label>
+
+        <div class="row">
+          <label>Evaluate at<input name="point" value="1 2" spellcheck="false"></label>
+          <label>Quantity
+            <select name="what">
+              <option value="gradient">Gradient vector</option>
+              <option value="hessian">Hessian matrix</option>
+            </select>
+          </label>
+        </div>
+
+        <button type="submit" class="go">Compute</button>
+        <p class="hint">The Hessian's eigenvalues classify the point as a minimum, maximum or saddle.</p>
+      </form>
+      <div class="output" id="out-calc"><p class="placeholder">Results appear here.</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>
+      <strong>COMXL</strong> — ported from the COMxL Excel/VBA workbook by
+      Maspolic Amo Yeboah. MIT licensed.
+    </p>
+    <p class="fineprint">
+      Runs entirely in your browser. Built with
+      <a href="https://pyodide.org" target="_blank" rel="noopener">Pyodide</a>,
+      NumPy, pandas and Matplotlib.
+      <span id="version-note"></span>
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
