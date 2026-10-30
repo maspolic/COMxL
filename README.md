@@ -2,12 +2,7 @@
 
 **Classical optimisation methods with the working shown.**
 
-A pure-Python port of the COMxL Excel/VBA optimisation workbook, plus a browser
-version that needs no install at all.
-
-The original was a set of VBA user forms driving worksheet formulas: you typed
-an objective into a cell, pointed a form at that cell, and the macro wrote its
-iterations back onto the sheet. This repository keeps the algorithms and the
+This repository keeps the algorithms and the
 step-by-step output, but the objective is now an ordinary Python function.
 
 **▶ [Run it in your browser](https://maspolic-amo-yeboah.github.io/COMXL/)** —
@@ -87,15 +82,15 @@ r.plot_convergence()
 
 ## Modules
 
-| Module | Functions | Ported from |
+| Module | Functions |
 |---|---|---|
-| `gradientsearch` | `goldensection`, `intervalhalving`, `dichotomous`, `fibonacci`, `exhaustive`, `secant`, `newtonraphson`, `divide_conquer` | UserForm7–13, `Minimize1D` |
-| `directsearch` | `neldermead`, `powell` | `NelderMead_algo.bas`, UserForm15/18 |
-| `constrained` | `sqp`, `quasinewton`, `kkt`, `lagrangian` | UserForm1, 2, 16 |
-| `linprog` | `simplex`, `feasible`, `feasible_vertices`, `region_polygon`, `line_intersection`, `constraint_line` | `LinearProgramming.bas`, UserForm3/4 |
-| `calculus` | `gradient`, `hessian`, `jacobian`, `first_derivative`, `second_derivative`, `gradient_vector`, `hessian_matrix` | UserForm17, `Helper_Sub*.bas` |
-| `matrixops` | `inverse`, `transpose`, `multiply`, `add`, `subtract`, `gauss_pivot`, `eigenvalues`, `determinant`, `row_echelon` | `MatrixSubs.bas`, `Helper_Sub_2.bas` |
-| `plotting` | `plot_function`, `plot_contours`, `plot_constraints_2d`, `plot_path`, `save_figure`, `axis_scale` | `Module5.bas`, UserForm19/20 |
+| `gradientsearch` | `goldensection`, `intervalhalving`, `dichotomous`, `fibonacci`, `exhaustive`, `secant`, `newtonraphson`, `divide_conquer` |
+| `directsearch` | `neldermead`, `powell` |
+| `constrained` | `sqp`, `quasinewton`, `kkt`, `lagrangian` |
+| `linprog` | `simplex`, `feasible`, `feasible_vertices`, `region_polygon`, `line_intersection`, `constraint_line` |
+| `calculus` | `gradient`, `hessian`, `jacobian`, `first_derivative`, `second_derivative`, `gradient_vector`, `hessian_matrix` |
+| `matrixops` | `inverse`, `transpose`, `multiply`, `add`, `subtract`, `gauss_pivot`, `eigenvalues`, `determinant`, `row_echelon` |
+| `plotting` | `plot_function`, `plot_contours`, `plot_constraints_2d`, `plot_path`, `save_figure`, `axis_scale` |
 
 ## Examples
 
@@ -144,10 +139,6 @@ linprog.feasible_vertices([[2, 1], [1, 3]], [10, 15], ['<=', '<='])
 
 4 vertices of the feasible region.
 ```
-
-Non-negativity is imposed by default (`nonnegative=True`), so the axes count as
-boundaries and the origin appears as a corner. Rows are ordered
-counter-clockwise, so they trace the boundary.
 
 Plotting fills that polygon exactly — crisp edges rather than the ragged
 outline a sampled grid gives — with dotted constraint boundaries as in the
