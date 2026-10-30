@@ -44,8 +44,7 @@ Golden section search result (converged in 4 iterations)
 | `comxl/` | The Python package |
 | `tests/` | 104 tests, each against a problem with a known analytical answer |
 | `docs/` | The GitHub Pages site — the browser version |
-| `notebooks/` | A 70-cell walkthrough of every module |
-| `vba_source/` | The original `.bas` and `.frm` files, kept for provenance |
+| `notebooks/` | A 70-cell walkthrough of every module ||
 | `tools/` | Build the Pages wheel; end-to-end test the site |
 | `PUBLISHING.md` | One-time checklist for pushing and enabling Pages |
 
