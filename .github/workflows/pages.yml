@@ -1,0 +1,49 @@
+name: deploy pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the site has a wheel to install
+        run: |
+          test -f docs/wheels/manifest.json || {
+            echo "::error::docs/wheels/manifest.json is missing."
+            exit 1
+          }
+          ls -1 docs/wheels/comxl-*.whl >/dev/null || {
+            echo "::error::No comxl wheel in docs/wheels/."
+            exit 1
+          }
+          cat docs/wheels/manifest.json
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
