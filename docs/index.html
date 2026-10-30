@@ -69,8 +69,8 @@
       <form class="controls" id="form-1d">
         <h2>One-dimensional search</h2>
         <p class="hint">
-          Minimise a function, <em>f(x)</em> over an interval [a b]. 
-          Write the variable as <code>x</code>; and powers as <code>^</code>.
+          Minimise a function, <strong><em>f(x)</em></strong>strong> over an interval [a b]. 
+          Write the variable as <code>x</code> ; and powers as <code>^</code> .
         </p>
 
         <label>Method
@@ -86,17 +86,17 @@
           </select>
         </label>
 
-        <label>Objective f(x)
+        <label>Objective, f(x)
           <input name="expression" value="x^4 - 3*x^3 + 2" spellcheck="false">
         </label>
 
         <div class="row" data-when="bracket">
-          <label>Lower bound a<input name="a" value="0"></label>
-          <label>Upper bound b<input name="b" value="4"></label>
+          <label>Lower bound, a<input name="a" value="0"></label>
+          <label>Upper bound, b<input name="b" value="4"></label>
         </div>
 
         <div class="row" data-when="point" hidden>
-          <label>Starting point x₀<input name="x0" value="3"></label>
+          <label>Starting point, x₀<input name="x0" value="3"></label>
         </div>
 
         <div class="row" data-when="tol">
@@ -129,20 +129,20 @@
     <div class="panel-grid">
       <form class="controls" id="form-multi">
         <h2>Multivariable unconstrained</h2>
-        <p class="hint">Derivative-free minimisation. Variables are <code>x1</code>, <code>x2</code>, … (or <code>x[0]</code>, <code>x[1]</code>). The number of variables comes from the starting point.</p>
+        <p class="hint">Derivative-free minimisation. Variables are represented as: <code>x1</code> , <code>x2</code> , … ( or <code>x[0]</code> , <code>x[1]</code> ). The number of variables is determined from the starting point.</p>
 
         <label>Method
           <select name="method">
-            <option value="neldermead">Nelder–Mead simplex</option>
-            <option value="powell">Powell's conjugate directions</option>
+            <option value="neldermead">Nelder–Mead Simplex</option>
+            <option value="powell">Powell's Conjugate Directions</option>
           </select>
         </label>
 
-        <label>Objective f(x)
+        <label>Objective, f(x)
           <input name="expression" value="(1-x1)^2 + 100*(x2-x1^2)^2" spellcheck="false">
         </label>
 
-        <label>Starting point x₀
+        <label>Starting point, x₀
           <input name="x0" value="-1.2 1.0" spellcheck="false">
         </label>
 
@@ -176,8 +176,8 @@
       <form class="controls" id="form-lp">
         <h2>Linear programming</h2>
         <p class="hint">
-          One row per constraint, then a final row for the objective. The last column
-          is the right-hand side. Constraints are treated as ≤ for a maximisation.
+          All constraints are represented as rows with the last last being the right-hand side of the constraint (one row per constraint), 
+          then a final row for the objective function. Constraints are treated as ≤ for a maximization and for ≥ minimization.
         </p>
 
         <label>Problem matrix
@@ -190,7 +190,7 @@
           <label>Direction
             <select name="mode">
               <option value="max">Maximise</option>
-              <option value="min">Minimise (via the dual)</option>
+              <option value="min">Minimise (via the Dual method)</option>
             </select>
           </label>
           <label>Region shading
@@ -210,8 +210,8 @@
           <button type="button" data-ex='{"matrix":"1 2 4\n3 1 6\n6 3 0","mode":"min"}'>Minimisation</button>
         </div>
         <p class="hint">
-          With two decision variables the feasible region is drawn, its corner points
-          listed with coordinates, and the optimum marked.
+          With two decision variables, the feasible region is drawn. The corner points are
+          listed with coordinates and the optimum is marked.
         </p>
       </form>
       <div class="output" id="out-lp"><p class="placeholder">Results appear here.</p></div>
@@ -228,7 +228,7 @@
           <strong>h(x) = 0</strong>, one per line. For <code>x1 ≥ 0</code> enter <code>-x1</code>.
         </p>
 
-        <label>Objective f(x)
+        <label>Objective, f(x)
           <input name="expression" value="(x1-2)^2 + (x2-1)^2" spellcheck="false">
         </label>
 
@@ -237,13 +237,13 @@
           <label>Starting guess<input name="x0" value="0.5 0.5" spellcheck="false"></label>
         </div>
 
-        <label>Inequalities g(x) ≤ 0
+        <label>Inequalities, g(x) ≤ 0
           <textarea name="inequality" rows="3" spellcheck="false">x1 + x2 - 2
 -x1
 -x2</textarea>
         </label>
 
-        <label>Equalities h(x) = 0 <span class="opt">(optional)</span>
+        <label>Equalities, h(x) = 0 <span class="opt">(optional)</span>
           <textarea name="equality" rows="2" spellcheck="false"></textarea>
         </label>
 
@@ -277,18 +277,18 @@
             <option value="determinant">Determinant</option>
             <option value="eigenvalues">Eigenvalues</option>
             <option value="transpose">Transpose</option>
-            <option value="row_echelon">Row echelon form</option>
+            <option value="row_echelon">Row Echelon Form</option>
             <option value="solve">Solve A x = b</option>
           </select>
         </label>
 
-        <label>Matrix A
+        <label>Matrix, A
           <textarea name="matrix" rows="4" spellcheck="false">4 -2 1
 -2 4 -2
 1 -2 4</textarea>
         </label>
 
-        <label data-when="rhs" hidden>Right-hand side b
+        <label data-when="rhs" hidden>Column Vector, b
           <input name="rhs" value="11 -16 17" spellcheck="false">
         </label>
 
@@ -303,9 +303,8 @@
     <div class="panel-grid">
       <form class="controls" id="form-calc">
         <h2>Gradient and Hessian</h2>
-        <p class="hint">Central differences with the same step the workbook used (Δx = 10⁻⁴).</p>
 
-        <label>Function f(x)
+        <label>Function, f(x)
           <input name="expression" value="x1^2 + 3*x1*x2 + 2*x2^2" spellcheck="false">
         </label>
 
