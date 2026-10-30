@@ -5,7 +5,7 @@
 This repository keeps the algorithms and the
 step-by-step output, but the objective is now an ordinary Python function.
 
-**▶ [Run it in your browser](https://maspolic-amo-yeboah.github.io/COMXL/)** —
+**▶ [Run it in your browser](https://maspolic.github.io/COMXL/)** —
 no install; everything executes locally via Pyodide.
 
 ![The linear-programming panel of the COMXL web app, showing the simplex
