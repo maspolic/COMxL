@@ -100,13 +100,13 @@ def simplex(matrix, mode: str = "max", max_iter: int = 40,
 
     def frame(tab, basis):
         return pd.DataFrame(
-            tab,
-            index=[labels[b] for b in basis] + ["z"],
-            columns=labels + ["RHS"],
+            tab.copy(), # originally tab or without .copy()
+            index=[labels[b] for b in list(basis]) + ["z"], # originally without list
+            columns=list(labels) + ["RHS"], # originally without list
         )
 
     # 1. Capture initial tableau using a deep copy
-    tableaux = [frame(t.copy(), list(active))]
+    tableaux = [frame(t, list(active))] # originally tableaux = [frame(t.copy(), list(active))]
 
     # --- pivoting (GetNextTab) --------------------------------------------
     n_iter = 0
@@ -141,7 +141,7 @@ def simplex(matrix, mode: str = "max", max_iter: int = 40,
 
         n_iter += 1
         # 2. Capture intermediate tableau using a deep copy
-        tableaux.append(frame(t.copy(), list(active)))   
+        tableaux.append(frame(t, list(active))) # originally tableaux.append(frame(t.copy(), list(active)))   
     # --- read off the solution (PrintMaxSol / PrintMinSol) ----------------
     z = t[nrows - 1, ncols - 1]
     if mode == "max":
