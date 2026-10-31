@@ -26,28 +26,6 @@ docs/
 So the browser and the test suite exercise the same code. The only
 browser-specific piece is turning a Matplotlib figure into a data URI.
 
-## Rebuilding the wheel
-
-`wheels/` is committed deliberately — Pages serves static files only, so there
-is nothing to build at request time. After changing anything in `comxl/`:
-
-```bash
-python tools/build_web_wheel.py
-git add docs/wheels
-```
-
-The `tests` workflow fails if the committed wheel is a different version from
-the one it builds, so a stale wheel cannot reach the site unnoticed.
-
-## Testing before publishing
-
-```bash
-python tools/test_site.py
-```
-
-Serves this folder, loads it in headless Chromium, drives every panel and
-asserts the results.
-
 ## Notes
 
 - First load fetches roughly 15 MB of runtime from the jsDelivr CDN and is
