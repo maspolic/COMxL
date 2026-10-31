@@ -81,31 +81,7 @@ def simplex(matrix, mode: str = "max", max_iter: int = 40,
     num_v = num_x + num_s
     ncols = num_v + 2               # + objective column + RHS
 
-    # --- initial tableau (MakeInitialTab) ---------------------------------
-    t = np.zeros((nrows, ncols))
-    for i in range(nrows):
-        for j in range(num_x):
-            t[i, j] = mat[i, j]
-            if i == nrows - 1:
-                t[i, j] = -t[i, j]      # objective row enters negated
-        t[i, ncols - 1] = mat[i, num_x]
-        for j in range(num_x, num_v + 1):
-            if i + num_x == j:
-                t[i, j] = 1.0
-
-    labels = ([f"x{i + 1}" for i in range(num_x)] +
-              [f"s{i + 1}" for i in range(num_s)] + ["z"])
-    active = list(range(num_x, num_x + num_s))     # basis: slacks initially
-    vstat = [0] * num_x + [1] * num_s
-
-    def frame(tab, basis):
-        return pd.DataFrame(
-            tab,
-            index=[labels[b] for b in basis] + ["z"],
-            columns=labels + ["RHS"],
-        )
-
-    tableaux = [frame(t.copy(), list(active))]# --- initial tableau (MakeInitialTab) ---------------------------------
+   # --- initial tableau (MakeInitialTab) ---------------------------------
     t = np.zeros((nrows, ncols))
     for i in range(nrows):
         for j in range(num_x):
@@ -129,7 +105,7 @@ def simplex(matrix, mode: str = "max", max_iter: int = 40,
             columns=labels + ["RHS"],
         )
 
-    # FIX 1: Pass a copy of t and a copy of active
+    # 1. Capture initial tableau using a deep copy
     tableaux = [frame(t.copy(), list(active))]
 
     # --- pivoting (GetNextTab) --------------------------------------------
@@ -164,9 +140,8 @@ def simplex(matrix, mode: str = "max", max_iter: int = 40,
         vstat[leaving] = 0
 
         n_iter += 1
-        # FIX 2: Pass a copy of t and a copy of active here as well
-        tableaux.append(frame(t.copy(), list(active)))
-     
+        # 2. Capture intermediate tableau using a deep copy
+        tableaux.append(frame(t.copy(), list(active)))   
     # --- read off the solution (PrintMaxSol / PrintMinSol) ----------------
     z = t[nrows - 1, ncols - 1]
     if mode == "max":
