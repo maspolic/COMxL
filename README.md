@@ -2,6 +2,8 @@
 
 **Classical optimisation methods with the working shown.**
 
+### Check out the original Excel Add-In file here:  <a href="https://drive.google.com/drive/folders/1isgXroUbTSYhypePHVWIi2oAUib6cekB?usp=sharing" target="_blank" rel="noopener">COMxL Excel Add-In</a> contains all and more modules implemented.
+
 This repository keeps the algorithms and the
 step-by-step output, but the objective is now an ordinary Python function.
 
@@ -212,46 +214,6 @@ with the feasible-region plot, the KKT solver, matrix operations and
 derivatives. Each shows the same iteration table as the library, and renders
 Matplotlib figures as inline PNGs.
 
-### Publishing it
-
-1. **Settings → Pages → Source: GitHub Actions.** The `deploy pages` workflow
-   publishes `docs/` on every push to `main` that touches it.
-2. The site lands at `https://<user>.github.io/COMXL/`. Asset paths are
-   resolved against the page URL, so the project subpath works without
-   configuration.
-
-### After changing the package
-
-The site installs a committed wheel, so rebuild it or the published page keeps
-running the old code:
-
-```bash
-python tools/build_web_wheel.py
-git add docs/wheels && git commit -m "Rebuild Pages wheel"
-```
-
-The `tests` workflow fails if `docs/wheels/` holds a different version from the
-one it just built, so a stale wheel cannot reach the site unnoticed.
-
-### Testing the site
-
-```bash
-pip install playwright && python -m playwright install chromium
-python tools/test_site.py
-```
-
-This serves `docs/` locally, loads it in headless Chromium, waits for the
-runtime, then drives every panel and asserts the numbers — golden section
-reaching 2, the simplex reaching 24, the Hessian reporting a saddle, and so on.
-It also fails on any uncaught console error.
-
-## Tests
-
-```bash
-pytest tests/ -q                          # 104 tests
-pytest --doctest-modules comxl/ -q        # docstring examples
-```
-
 Every solver is checked against a problem with a known analytical answer, and
 `eigenvalues` is checked against `numpy.linalg.eigvals` for n = 2..5.
 
@@ -325,12 +287,6 @@ Each is documented in the source where it occurs.
   size (`xtol`, default 1e-8) is now required as well. Pass `xtol=0` to
   reproduce the original behaviour.
 
-## Provenance
-
-Ported from the 30 VBA source files in `vba_source/` (`.bas` modules and
-`.frm` user forms). The `.frx` companions hold only form binaries — icons and
-control layout — and contain no logic, so they are not included. Individual
-function docstrings name the VBA routine each was derived from.
 
 ## Licence
 
