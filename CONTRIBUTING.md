@@ -3,7 +3,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/Maspolic-Amo-Yeboah/COMXL.git
+git clone https://github.com/maspolic/COMXL.git
 cd COMXL
 pip install -e ".[dev,plots]"
 pytest tests/ -q
