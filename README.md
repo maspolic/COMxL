@@ -10,7 +10,7 @@ no install; everything executes locally via Pyodide.
 
 ![The linear-programming panel of the COMXL web app, showing the simplex
 result, the corner points of the feasible region and the shaded region
-plot](docs/assets/screenshot.png)
+plot](docs/assets/ScreenShot.png)
 
 ```python
 from comxl import gradientsearch
