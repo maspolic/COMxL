@@ -1,19 +1,34 @@
 /* COMXL — GitHub Pages stylesheet
-   A restrained, document-like palette: ink and paper, one accent drawn from
-   the deep blue used for the feasible-region outline in the plots. */
+   Updated palette: Corporate Trust (Navy & Charcoal).
+   A formal, stable look using deep navy blues and a grayscale interaction system. */
 
 :root {
-  --ink:        #15232e;
-  --ink-soft:   #4a5c6a;
-  --ink-faint:  #8295a3;
+  /* Ink: For general text. Dark, high-contrast charcoal near-black. */
+  --ink:        #151a1e;
+  /* Ink-soft: For secondary text, like descriptions and hints. */
+  --ink-soft:   #4a545c;
+  /* Ink-faint: For disabled text or very subtle details. */
+  --ink-faint:  #828d96;
+
+  /* Paper: Clean white for the main application cards. */
   --paper:      #ffffff;
-  --paper-warm: #f6f7f4;
+  /* Paper-warm: Very subtle light gray for the overall page background. */
+  --paper-warm: #f6f7f8;
+  /* Rule: For structural borders and dividers. */
   --rule:       #dde3e7;
+
+  /* Accent: Main corporate brand color (Navy), used for header, footer, and tables. */
   --accent:     #1d3557;
-  --accent-lit: #2b6ea8;
-  --region:     #8ecae6;
+  /* Accent-lit: Authoritative grey-blue, used as a subtle selection highlight. */
+  --accent-lit: #4a6a8c;
+
+  /* Region: Feasible region fill. (Kept for plot consistency). */
+  --region:      #8ecae6;
+  /* Good/Bad: For status indicators (unchanged). */
   --good:       #1b7f4d;
   --bad:        #b3261e;
+
+  /* Font Stacks */
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
   --serif: Georgia, "Times New Roman", serif;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -36,10 +51,10 @@ body {
 
 /* ── masthead ─────────────────────────────────────────────── */
 .masthead {
-  background: var(--accent);
+  background: var(--accent); /* Now Corporate Navy Blue */
   color: #fff;
-  padding: 22px 0;
-  border-bottom: 3px solid #122840;
+  padding: 32px 0; /* Slightly taller for more presence */
+  border-bottom: 3px solid #122840; /* Darker navy for a crisp edge */
 }
 .masthead .wrap {
   display: flex; align-items: center; justify-content: space-between;
@@ -55,19 +70,20 @@ body {
   margin: 0; font-size: 28px; letter-spacing: .14em; font-weight: 600;
 }
 .tagline {
-  margin: 2px 0 0; font-size: 14px; color: #bfd4e6;
+  margin: 2px 0 0; font-size: 14px; color: #bfd4e6; /* Soft blue-gray text */
   font-family: var(--serif); font-style: italic;
 }
 .masthead-links { display: flex; gap: 20px; }
 .masthead-links a {
-  color: #cfe0ef; text-decoration: none; font-size: 14px;
+  color: #cfe0ef; /* Soft blue-gray text */
+  text-decoration: none; font-size: 14px;
   border-bottom: 1px solid transparent; padding-bottom: 2px;
 }
 .masthead-links a:hover { color: #fff; border-bottom-color: #7fa8cc; }
 
 /* ── intro ────────────────────────────────────────────────── */
 .intro {
-  background: var(--paper);
+  background: var(--paper); /* Main body workspace is clean white */
   border-bottom: 1px solid var(--rule);
   padding: 26px 0;
 }
@@ -86,7 +102,7 @@ code {
 .boot { padding: 48px 24px; }
 .boot-card {
   background: var(--paper); border: 1px solid var(--rule);
-  border-left: 4px solid var(--accent-lit);
+  border-left: 4px solid var(--accent-lit); /* Uses the authoritative grey-blue */
   padding: 20px 24px; display: flex; gap: 18px; align-items: flex-start;
   max-width: 680px;
 }
@@ -113,11 +129,12 @@ code {
   cursor: pointer; border-radius: 4px 4px 0 0;
   position: relative; top: 2px;
 }
-.tab:hover { color: var(--accent); background: #eef1f4; }
+/* Subtle gray hover, not bright blue */
+.tab:hover { color: var(--ink); background: #eef1f4; }
 .tab.is-active {
-  background: var(--paper); color: var(--accent);
+  background: var(--paper); color: var(--ink); /* Less bright, more formal active state */
   border-color: var(--rule); font-weight: 600;
-  box-shadow: 0 -2px 0 var(--accent-lit) inset;
+  box-shadow: 0 -2px 0 var(--accent-lit) inset; /* Replaces bright blue underline */
 }
 
 /* ── panels ───────────────────────────────────────────────── */
@@ -133,7 +150,7 @@ code {
 
 /* ── form controls ────────────────────────────────────────── */
 .controls h2 {
-  margin: 0 0 6px; font-size: 19px; font-weight: 600; color: var(--accent);
+  margin: 0 0 6px; font-size: 19px; font-weight: 600; color: var(--ink);
 }
 .hint { margin: 0 0 16px; font-size: 13.5px; color: var(--ink-faint); }
 .controls .hint:last-of-type { margin: 16px 0 0; }
@@ -156,7 +173,7 @@ code {
 .controls textarea { resize: vertical; line-height: 1.5; }
 .controls input:focus, .controls select:focus, .controls textarea:focus {
   outline: none; border-color: var(--accent-lit);
-  box-shadow: 0 0 0 3px rgba(43,110,168,.14);
+  box-shadow: 0 0 0 3px rgba(74,106,140,.14); /* Grey-blue focus shadow */
 }
 .controls select { font-family: var(--sans); }
 
@@ -171,11 +188,13 @@ label.check input { width: auto; margin: 0; }
 
 .go {
   appearance: none; border: none; border-radius: 4px;
-  background: var(--accent); color: #fff;
+  background: var(--ink-soft); /* Replaces bright blue with sophisticated Slate Gray */
+  color: #fff;
   font: inherit; font-size: 15px; font-weight: 600;
   padding: 11px 26px; cursor: pointer; margin-top: 4px;
+  transition: background 0.2s;
 }
-.go:hover { background: var(--accent-lit); }
+.go:hover { background: var(--ink); /* Darker charcoal on hover */ }
 .go:disabled { background: var(--ink-faint); cursor: progress; }
 
 .examples {
@@ -185,10 +204,10 @@ label.check input { width: auto; margin: 0; }
 .examples button {
   appearance: none; background: var(--paper-warm);
   border: 1px solid var(--rule); border-radius: 20px;
-  font: inherit; font-size: 12.5px; color: var(--accent);
+  font: inherit; font-size: 12.5px; color: var(--ink);
   padding: 4px 12px; cursor: pointer;
 }
-.examples button:hover { background: #e7eef4; border-color: var(--accent-lit); }
+.examples button:hover { background: #e7eef4; border-color: var(--ink); }
 
 /* ── output ───────────────────────────────────────────────── */
 .output { min-width: 0; }
@@ -205,7 +224,7 @@ label.check input { width: auto; margin: 0; }
 }
 .summary.not-converged { border-left-color: #c77d12; }
 .summary h3 {
-  margin: 0 0 8px; font-size: 15px; color: var(--accent); font-weight: 600;
+  margin: 0 0 8px; font-size: 15px; color: var(--ink); font-weight: 600;
 }
 .summary dl {
   margin: 0; display: grid; grid-template-columns: auto 1fr;
@@ -224,7 +243,7 @@ label.check input { width: auto; margin: 0; }
 }
 
 .output h4 {
-  margin: 22px 0 8px; font-size: 14px; color: var(--accent);
+  margin: 22px 0 8px; font-size: 14px; color: var(--ink);
   text-transform: uppercase; letter-spacing: .08em; font-weight: 600;
 }
 .output h4:first-child { margin-top: 0; }
@@ -236,7 +255,8 @@ label.check input { width: auto; margin: 0; }
 table { border-collapse: collapse; width: 100%; font-size: 13px; }
 thead th {
   position: sticky; top: 0;
-  background: var(--accent); color: #fff;
+  background: var(--accent); /* Now Corporate Navy Blue */
+  color: #fff;
   text-align: right; padding: 8px 12px; font-weight: 600;
   white-space: nowrap; font-size: 12.5px;
 }
@@ -244,9 +264,11 @@ thead th:first-child { text-align: left; }
 tbody td {
   padding: 6px 12px; text-align: right; font-family: var(--mono);
   border-top: 1px solid var(--rule); white-space: nowrap;
+  color: var(--ink); /* Values are clear Near-Black */
 }
 tbody td:first-child { text-align: left; }
 tbody tr:nth-child(even) { background: #fafbfb; }
+/* Subtle highlight for the active/final row */
 tbody tr:last-child td { font-weight: 600; background: #eef4f8; }
 
 .plot { margin-top: 20px; }
@@ -257,7 +279,7 @@ tbody tr:last-child td { font-weight: 600; background: #eef4f8; }
 
 details.tableaux { margin-top: 18px; }
 details.tableaux summary {
-  cursor: pointer; font-size: 13.5px; color: var(--accent); font-weight: 600;
+  cursor: pointer; font-size: 13.5px; color: var(--ink); font-weight: 600;
   padding: 8px 0;
 }
 details.tableaux .table-scroll { margin-bottom: 14px; }
@@ -273,8 +295,10 @@ details.tableaux h5 {
 
 /* ── footer ───────────────────────────────────────────────── */
 .footer {
-  border-top: 1px solid var(--rule); background: var(--paper);
-  padding: 26px 0 40px; margin-top: 0;
+  border-top: 1px solid var(--rule);
+  background: var(--accent); /* Now anchored by Corporate Navy Blue */
+  padding: 32px 0 40px; /* Taller, matching the masthead */
+  margin-top: 0;
 }
-.footer p { margin: 0 0 6px; font-size: 14px; color: var(--ink-soft); }
-.footer a { color: var(--accent-lit); }
+.footer p { margin: 0 0 6px; font-size: 14px; color: #cfe0ef; } /* Off-white text */
+.footer a { color: #fff; text-decoration: underline; } /* White links */
