@@ -1,6 +1,4 @@
-/* COMXL — GitHub Pages stylesheet
-   Updated palette: Corporate Trust (Navy & Charcoal).
-   A formal, stable look using deep navy blues and a grayscale interaction system. */
+/* COMXL — GitHub Pages stylesheet */
 
 :root {
   /* Ink: For general text. Dark, high-contrast charcoal near-black. */
@@ -188,13 +186,13 @@ label.check input { width: auto; margin: 0; }
 
 .go {
   appearance: none; border: none; border-radius: 4px;
-  background: var(--ink-soft); /* Replaces bright blue with sophisticated Slate Gray */
+  background: var(--accent); 
   color: #fff;
   font: inherit; font-size: 15px; font-weight: 600;
   padding: 11px 26px; cursor: pointer; margin-top: 4px;
   transition: background 0.2s;
 }
-.go:hover { background: var(--ink); /* Darker charcoal on hover */ }
+.go:hover { background: var(--accent-lit); /* Darker charcoal on hover */ }
 .go:disabled { background: var(--ink-faint); cursor: progress; }
 
 .examples {
@@ -219,7 +217,7 @@ label.check input { width: auto; margin: 0; }
 
 .summary {
   background: var(--paper-warm); border: 1px solid var(--rule);
-  border-left: 4px solid var(--good);
+  border-left: 4px solid var(--accent);
   padding: 14px 18px; margin: 0 0 18px; border-radius: 0 4px 4px 0;
 }
 .summary.not-converged { border-left-color: #c77d12; }
